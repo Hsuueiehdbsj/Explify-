@@ -179,38 +179,28 @@ Your summaries should:
 
 Make every summary feel like a VIP briefing - quick, insightful, and visually appealing."""
 
+# Configure API Key (from Streamlit Secrets)
+try:
+    # Get API key from Streamlit secrets (for deployment)
+    api_key = st.secrets["GOOGLE_API_KEY"]
+    genai.configure(api_key=api_key)
+    api_configured = True
+except Exception as e:
+    # Fallback to environment variable (for local development)
+    api_key = os.getenv("GOOGLE_API_KEY", "")
+    if api_key:
+        genai.configure(api_key=api_key)
+        api_configured = True
+    else:
+        api_configured = False
+
 # Initialize session state
 if 'api_configured' not in st.session_state:
-    st.session_state.api_configured = False
+    st.session_state.api_configured = api_configured
 
 # Sidebar
 with st.sidebar:
     st.markdown("### ⚙️ Settings")
-    
-    # API Key Input - Check Streamlit secrets first, then environment variable
-    try:
-        default_api_key = st.secrets.get("GOOGLE_API_KEY", os.getenv("GOOGLE_API_KEY", ""))
-    except:
-        default_api_key = os.getenv("GOOGLE_API_KEY", "")
-    
-    api_key = st.text_input(
-        "Gemini API Key",
-        type="password",
-        value=default_api_key,
-        help="Enter your Google Gemini API key"
-    )
-    
-    if api_key:
-        try:
-            genai.configure(api_key=api_key)
-            st.session_state.api_configured = True
-            st.success("✅ API Key Configured")
-        except Exception as e:
-            st.error(f"❌ Invalid API Key: {str(e)}")
-            st.session_state.api_configured = False
-    else:
-        st.warning("⚠️ Please enter your API key")
-        st.session_state.api_configured = False
     
     st.markdown("---")
     
@@ -243,6 +233,10 @@ with st.sidebar:
     - Higher creativity = more expressive summaries
     - Videos are processed via Gemini File API
     - All uploads are automatically deleted after processing
+    
+    ---
+    
+    **Powered by AI** - No API key needed! 🚀
     """)
 
 # Main Interface
@@ -254,13 +248,7 @@ st.markdown(
 
 # Check if API is configured
 if not st.session_state.api_configured:
-    st.error("🚨 Please configure your Gemini API Key in the sidebar to get started!")
-    st.info("""
-    **How to get your API key:**
-    1. Go to [Google AI Studio](https://aistudio.google.com/app/apikey)
-    2. Click "Create API Key"
-    3. Copy and paste it in the sidebar
-    """)
+    st.error("🚨 API Configuration Error - Please contact the administrator!")
     st.stop()
 
 # Tabs
@@ -446,4 +434,4 @@ st.markdown("---")
 st.markdown(
     '<p style="text-align: center; color: #6b7280; font-size: 0.875rem;">Made with ⚡ by Explify | Powered by Google Gemini 1.5 Flash</p>',
     unsafe_allow_html=True
-)
+        )
