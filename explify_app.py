@@ -1,6 +1,6 @@
 """
 Explify ⚡ - The Multimodal AI Explainer
-A Streamlit app for summarizing Text, Images, and Videos using Google Gemini 1.5 Flash
+A Streamlit app for summarizing Text, Images, and Videos using Google Gemini Pro
 """
 
 import streamlit as st
@@ -220,7 +220,7 @@ with st.sidebar:
     st.markdown("""
     ### 💡 About Explify
     
-    Explify uses **Google Gemini 1.5 Flash** to provide instant, intelligent summaries of:
+    Explify uses **Google Gemini Pro** to provide instant, intelligent summaries of:
     - 📄 Text documents
     - 🖼️ Images
     - 🎥 Videos
@@ -258,9 +258,9 @@ tab1, tab2, tab3 = st.tabs(["📄 Text", "🖼️ Image", "🎥 Video"])
 def generate_summary(model_input, input_type="text"):
     """Generate summary using Gemini"""
     try:
-        # Use the correct model name for the latest API
+        # Use gemini-pro for maximum compatibility
         model = genai.GenerativeModel(
-            model_name='gemini-1.5-flash-latest',
+            model_name='gemini-pro',
             generation_config={
                 'temperature': temperature,
                 'top_p': 0.95,
@@ -432,6 +432,7 @@ with tab3:
 # Footer
 st.markdown("---")
 st.markdown(
-    '<p style="text-align: center; color: #6b7280; font-size: 0.875rem;">Made with ⚡ by Explify | Powered by Google Gemini 1.5 Flash</p>',
+    '<p style="text-align: center; color: #6b7280; font-size: 0.875rem;">Made with ⚡ by Explify | Powered by Google Gemini Pro</p>',
     unsafe_allow_html=True
-        )
+                                              )
+                    
