@@ -260,7 +260,7 @@ def generate_summary(model_input, input_type="text"):
     """Generate summary using Gemini"""
     try:
         model = genai.GenerativeModel(
-            model_name='gemini-1.5-flash',
+            gemini-1.5-flash-latest or gemini-pro,
             generation_config={
                 'temperature': temperature,
                 'top_p': 0.95,
